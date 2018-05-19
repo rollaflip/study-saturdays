@@ -2,7 +2,7 @@
 
 module.exports = {
   // Compile ./browser/index.js
-  entry: './browser/index.js',
+  entry: ['babel-polyfill', './browser/index.js'],
   output: {
     path: __dirname,
     //write the output to ./public/bundle.js

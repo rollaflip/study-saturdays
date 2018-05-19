@@ -12,6 +12,7 @@
     ],
     // This tells babel we want to use react w/ es6
     "react",   
-    "stage-2" 
+    "stage-2"
+    
   ]
 }

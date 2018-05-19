@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Student = require('../db/models/students');
+const Test = require('../db/models/tests')
 
 router.get('/:studentId', function(req, res, next) {
   Student.findById(req.params.studentId)
@@ -14,12 +15,17 @@ router.get('/', function(req, res, next) {
   Student.findAll({ include: { all: true } }).then(students => res.json(students));
 });
 
-router.post('/', function(req, res, next) {
-  Student.create(req.body)
-    .then(student => res.json(student))
+router.post('/', function (req, res, next) {
+  Student.create(req.body).then(studentNoTest => {
+    return Promise.all([Test.create({ subject: 'Programming', grade: 90, studentId: studentNoTest.id }), studentNoTest])
+  }).then(([test, student]) => {
+    Student.findById(student.id, { include: {all: true}})
+      .then(foundStudent => {
+        res.json(foundStudent)
+      })
+  })
     .catch(next);
 });
-
 router.put('/:id', function(req, res, next) {
   Student.update(req.body, {
     where: {
